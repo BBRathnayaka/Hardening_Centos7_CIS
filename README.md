@@ -1,4 +1,4 @@
-# Hardening_Centos7_CIS
+# Hardening Centos7 
 
 1.1 Filesystem Configuration 
 Directories that are used for system-wide functions can be further protected by placing them on separate partitions. This provides protection for resource exhaustion and enables the use of mounting options that are applicable to the directory's intended use. Users' data can be stored on separate partitions and have stricter mount options. A user partition is a filesystem that has been established for use by the users and does not contain software for system operations. 
