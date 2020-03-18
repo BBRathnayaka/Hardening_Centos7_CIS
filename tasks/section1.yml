@@ -262,5 +262,20 @@
       - scored
       - patch
       - rule_1.2.2
+      
+# - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
 
+# - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
 
+# - name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
+
+- name: "NOTSCORED | 1.2.5 | PATCH | Disable the rhnsd Daemon"
+  service:
+      name: rhnsd
+      state: stopped
+      enabled: no
+  tags:
+      - level2
+      - notscored
+      - patch
+      - rule_1.2.5
