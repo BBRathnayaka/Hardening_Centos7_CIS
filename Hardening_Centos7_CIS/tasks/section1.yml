@@ -1,11 +1,10 @@
+
 - name: "SCORED | 1.1.1.1 | PATCH | Ensure mounting of cramfs filesystems is disabled"
   lineinfile:
       dest: /etc/modprobe.d/CIS.conf
       regexp: "^(#)?install cramfs(\\s|$)"
       line: "install cramfs /bin/true"
       create: yes
-  when:
-      - centos7cis_rule_1_1_1_1|bool
   tags:
       - level1
       - scored
@@ -17,9 +16,6 @@
   modprobe:
       name: cramfs
       state: absent
-  when:
-      - centos7cis_rule_1_1_1_1|bool
-      - ansible_connection != 'docker'
   tags:
       - level1
       - scored
@@ -33,9 +29,6 @@
       regexp: "^(#)?install freevxfs(\\s|$)"
       line: "install freevxfs /bin/true"
       create: yes
-  when:
-      - centos7cis_rule_1_1_1_2|bool
-      - ansible_connection != 'docker'
   tags:
       - level1
       - scored
@@ -47,9 +40,6 @@
   modprobe:
       name: freevxfs
       state: absent
-  when:
-      - centos7cis_rule_1_1_1_2|bool
-      - ansible_connection != 'docker'
   tags:
       - level1
       - scored
@@ -63,8 +53,6 @@
       regexp: "^(#)?install jffs2(\\s|$)"
       line: "install jffs2 /bin/true"
       create: yes
-  when:
-      - centos7cis_rule_1_1_1_3|bool
   tags:
       - level1
       - scored
@@ -76,9 +64,6 @@
   modprobe:
       name: jffs2
       state: absent
-  when:
-      - centos7cis_rule_1_1_1_3|bool
-      - ansible_connection != 'docker'
   tags:
       - level1
       - scored
@@ -92,8 +77,6 @@
       regexp: "^(#)?install hfs(\\s|$)"
       line: "install hfs /bin/true"
       create: yes
-  when:
-      - centos7cis_rule_1_1_1_4|bool
   tags:
       - level1
       - scored
@@ -105,9 +88,6 @@
   modprobe:
       name: hfs
       state: absent
-  when:
-      - centos7cis_rule_1_1_1_4|bool
-      - ansible_connection != 'docker'
   tags:
       - level1
       - scored
@@ -121,8 +101,6 @@
       regexp: "^(#)?install hfsplus(\\s|$)"
       line: "install hfsplus /bin/true"
       create: yes
-  when:
-      - centos7cis_rule_1_1_1_5|bool
   tags:
       - level1
       - scored
@@ -134,9 +112,6 @@
   modprobe:
       name: hfsplus
       state: absent
-  when:
-      - centos7cis_rule_1_1_1_5|bool
-      - ansible_connection != 'docker'
   tags:
       - level1
       - scored
@@ -150,8 +125,6 @@
       regexp: "^(#)?install squashfs(\\s|$)"
       line: "install squashfs /bin/true"
       create: yes
-  when:
-      - centos7cis_rule_1_1_1_6|bool
   tags:
       - level1
       - scored
@@ -163,9 +136,6 @@
   modprobe:
       name: squashfs
       state: absent
-  when:
-      - centos7cis_rule_1_1_1_6|bool
-      - ansible_connection != 'docker'
   tags:
       - level1
       - scored
@@ -179,8 +149,6 @@
       regexp: "^(#)?install udf(\\s|$)"
       line: "install udf /bin/true"
       create: yes
-  when:
-      - centos7cis_rule_1_1_1_7|bool
   tags:
       - level1
       - scored
@@ -192,9 +160,6 @@
   modprobe:
       name: udf
       state: absent
-  when:
-      - centos7cis_rule_1_1_1_7|bool
-      - ansible_connection != 'docker'
   tags:
       - level1
       - scored
@@ -208,8 +173,6 @@
       regexp: "^(#)?install vfat(\\s|$)"
       line: "install vfat /bin/true"
       create: yes
-  when:
-      - centos7cis_rule_1_1_1_8|bool
   tags:
       - level1
       - scored
@@ -221,9 +184,6 @@
   modprobe:
       name: vfat
       state: absent
-  when:
-      - centos7cis_rule_1_1_1_8|bool
-      - ansible_connection != 'docker'
   tags:
       - level2
       - scored
@@ -231,20 +191,7 @@
       - rule_1.1.1.8
       - vfat
 
-- name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
-  systemd:
-      name: tmp.mount
-      daemon_reload: yes
-      enabled: yes
-      masked: no
-      state: started
-  when:
-      - centos7cis_rule_1_1_2|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.1.2
+# - name: "SCORED | 1.1.2 | PATCH | Ensure separate partition exists for /tmp | enable and start/restart tmp.mount"
 
 - name: "SCORED | 1.1.3 | PATCH | Ensure nodev option set on /tmp partition\n
          SCORED | 1.1.4 | PATCH | Ensure nosuid option set on /tmp partition\n
@@ -257,10 +204,6 @@
       group: root
       mode: 0644
   notify: systemd restart tmp.mount
-  when:
-      - centos7cis_rule_1_1_3|bool
-      - centos7cis_rule_1_1_4|bool
-      - centos7cis_rule_1_1_5|bool
   tags:
       - level1
       - scored
@@ -269,321 +212,67 @@
       - rule_1.1.4
       - rule_1.1.5
 
-- name: "SCORED | 1.1.6 | PATCH | Ensure separate partition exists for /var"
-  shell: mount | grep "on /var "
-  args:
-      warn: false
-  register: var_mounted
-  changed_when: no
-  failed_when: no
-  when:
-      - centos7cis_rule_1_1_6|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.1.6
-      - skip_ansible_lint
+# - name: "SCORED | 1.1.6 | PATCH | Ensure separate partition exists for /var"
 
-- name: "SCORED | 1.1.7 | PATCH | Ensure separate partition exists for /var/tmp"
-  shell: mount | grep "on /var/tmp "
-  register: var_tmp_mounted
-  changed_when: no
-  failed_when: no
-  when:
-      - centos7cis_rule_1_1_7|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.1.7
-      - skip_ansible_lint
+# - name: "SCORED | 1.1.7 | PATCH | Ensure separate partition exists for /var/tmp"
 
-- name: "SCORED | 1.1.8  | PATCH | Ensure nodev option set on /var/tmp partition\n
-         SCORED | 1.1.9  | PATCH | Ensure nosuid option set on /var/tmp partition\n
-         SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
-  mount:
-      name: /var/tmp
-      src: "{{ centos7cis_vartmp['source'] }}"
-      state: present
-      fstype: "{{ centos7cis_vartmp['fstype'] }}"
-      opts: "{{ centos7cis_vartmp['opts'] }}"
-  when:
-      - centos7cis_vartmp['enabled']
-      - centos7cis_rule_1_1_8|bool
-      - centos7cis_rule_1_1_9|bool
-      - centos7cis_rule_1_1_10|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_1.1.8
-      - rule_1.1.9
-      - rule_1.1.10
+# - name: "SCORED | 1.1.8  | PATCH | Ensure nodev option set on /var/tmp partition\n
+#          SCORED | 1.1.9  | PATCH | Ensure nosuid option set on /var/tmp partition\n
+#          SCORED | 1.1.10 | PATCH | Ensure noexec option set on /var/tmp partition"
 
-- name: "SCORED | 1.1.11 | PATCH | Ensure separate partition exists for /var/log"
-  shell: mount | grep "on /var/log "
-  register: var_log_mounted
-  changed_when: no
-  failed_when: no
-  when:
-      - centos7cis_rule_1_1_11|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.1.11
-      - skip_ansible_lint
+# - name: "SCORED | 1.1.11 | PATCH | Ensure separate partition exists for /var/log"
 
-- name: "SCORED | 1.1.12 | PATCH | Ensure separate partition exists for /var/log/audit"
-  shell: mount | grep "on /var/log/audit "
-  register: var_log_audit_mounted
-  changed_when: no
-  failed_when: no
-  when:
-      - centos7cis_rule_1_1_12|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.1.12
-      - skip_ansible_lint
+# - name: "SCORED | 1.1.12 | PATCH | Ensure separate partition exists for /var/log/audit"
 
-- name: "SCORED | 1.1.13 | PATCH | Ensure separate partition exists for /home"
-  shell: mount | grep "on /home"
-  register: home_mounted
-  changed_when: no
-  failed_when: no
-  when:
-      - centos7cis_rule_1_1_13|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.1.13
-      - skip_ansible_lint
+# - name: "SCORED | 1.1.13 | PATCH | Ensure separate partition exists for /home"
 
-- name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
-  mount:
-      name: "/home"
-      src: "{{ item.device }}"
-      state: mounted
-      fstype: "{{ item.fstype }}"
-      opts: "nodev"
-  when:
-      - centos7cis_rule_1_1_14|bool
-      - item.mount == "/home"
-  with_items: "{{ ansible_mounts }}"
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.14
+# - name: "SCORED | 1.1.14 | PATCH | Ensure nodev option set on /home partition"
 
-- name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition\n
-         SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition\n
-         SCORED | 1.1.17 | PATCH | Ensure noexec option set on /dev/shm partition"
-  mount:
-      name: /dev/shm
-      src: tmpfs
-      state: mounted
-      fstype: tmpfs
-      opts: "defaults,nodev,nosuid,noexec"
-  when:
-      - centos7cis_rule_1_1_15|bool
-      - centos7cis_rule_1_1_16|bool
-      - centos7cis_rule_1_1_17|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_1.1.15
-      - rule_1.1.16
-      - rule_1.1.17
+# - name: "SCORED | 1.1.15 | PATCH | Ensure nodev option set on /dev/shm partition\n
+#          SCORED | 1.1.16 | PATCH | Ensure nosuid option set on /dev/shm partition\n
+#          SCORED | 1.1.17 | PATCH | Ensure noexec option set on /dev/shm partition"
 
-- name: "NOTSCORED | 1.1.18 | PATCH | Ensure nodev option set on removable media partitions"
-  debug:
-      msg: "--> Not relevant"
-  changed_when: no
-  when:
-      - centos7cis_rule_1_1_18|bool
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.1.18
 
-- name: "NOTSCORED | 1.1.19 | PATCH | Ensure nosuid option set on removable media partitions"
-  debug:
-      msg: "--> Not relevant"
-  changed_when: no
-  when:
-      - centos7cis_rule_1_1_19|bool
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.1.19
+# - name: "NOTSCORED | 1.1.18 | PATCH | Ensure nodev option set on removable media partitions"
 
-- name: "NOTSCORED | 1.1.20 | PATCH | Ensure noexec option set on removable media partitions"
-  debug:
-      msg: "--> Not relevant"
-  changed_when: no
-  when:
-      - centos7cis_rule_1_1_20|bool
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.1.20
+# - name: "NOTSCORED | 1.1.19 | PATCH | Ensure nosuid option set on removable media partitions"
 
-- name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
-  shell: set -o pipefail && df --local -P | awk {'if (NR!=1) print $6'} | xargs -I '{}' find '{}' -xdev -type d -perm -0002 2>/dev/null | xargs chmod a+t
-  changed_when: no
-  failed_when: no
-  #when: sticky_bit_on_worldwritable_dirs_audit.rc == '0'
-  when:
-      - centos7cis_rule_1_1_21|bool
-  tags:
-      - level1
-      - level2
-      - patch
-      - rule_1.1.21
+# - name: "NOTSCORED | 1.1.20 | PATCH | Ensure noexec option set on removable media partitions"
+
+# - name: "SCORED | 1.1.21 | PATCH | Ensure sticky bit is set on all world-writable directories"
 
 - name: "SCORED | 1.1.22 | PATCH | Disable Automounting"
   service:
       name: autofs
       enabled: no
-  when:
-      - not centos7cis_allow_autofs
-      - autofs_service_status.stdout == "loaded"
-      - centos7cis_rule_1_1_22|bool
   tags:
       - level1
       - patch
       - rule_1.1.22
 
-- name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
-  command: yum check-update
-  args:
-      warn: false
-  register: yum_configured
-  changed_when: no
-  failed_when: no
-  when:
-      - centos7cis_rule_1_2_1|bool
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.2.1
-      - skip_ansible_lint
+# - name: "NOTSCORED | 1.2.1 | PATCH | Ensure package manager repositories are configured"
 
 - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
   replace:
       name: /etc/yum.conf
       regexp: "^gpgcheck=0"
       replace: "gpgcheck=1"
-  when:
-      - centos7cis_rule_1_2_2|bool
   tags:
       - level1
       - scored
       - patch
       - rule_1.2.2
+      
+# - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
 
-- name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
-  find:
-      paths: /etc/yum.repos.d
-      patterns: "*.repo"
-  register: yum_repos
-  changed_when: no
-  when:
-      - centos7cis_rule_1_2_2|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_1.2.2
+# - name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
 
-- name: "SCORED | 1.2.2 | PATCH | Ensure gpgcheck is globally activated"
-  replace:
-      name: "{{ item.path }}"
-      regexp: "^gpgcheck=0"
-      replace: "gpgcheck=1"
-  with_items:
-      - "{{ yum_repos.files }}"
-  when:
-      - centos7cis_rule_1_2_2|bool
-  tags:
-      - level1
-      - scored
-      - patch
-      - rule_1.2.2
-
-- name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
-  command: gpg --quiet --with-fingerprint /etc/pki/rpm-gpg/RPM-GPG-KEY-{{ ansible_distribution|lower }}-release
-  when:
-      - centos7cis_rule_1_2_3|bool
-      - ansible_distribution == "RedHat"
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.2.3
-
-- name: "NOTSCORED | 1.2.4 | PATCH | Ensure Red Hat Network or Subscription Manager connection is configured"
-  command: subscription-manager identity
-  changed_when: no
-  failed_when: no
-  when:
-      - ansible_distribution == "RedHat"
-      - centos7cis_rule_1_2_4|bool
-  tags:
-      - level1
-      - notscored
-      - patch
-      - rule_1.2.4
-
-- name: "NOTSCORED | 1.2.5 | PATCH | Disable the rhnsd Daemon"
-  service:
-      name: rhnsd
-      state: stopped
-      enabled: no
-  when:
-      - ansible_distribution == "RedHat" and rhnsd_service_status.stdout == "loaded" and not centos7cis_rhnsd_required
-      - centos7cis_rule_1_2_5|bool
-  tags:
-      - level2
-      - notscored
-      - patch
-      - rule_1.2.5
+# - name: "NOTSCORED | 1.2.3 | PATCH | Ensure GPG keys are configured"
 
 - name: "SCORED | 1.3.1 | PATCH | Ensure AIDE is installed"
   yum:
       name: aide
       state: present
-  when:
-      - centos7cis_rule_1_3_1|bool
-  tags:
-      - level1
-      - scored
-      - aide
-      - patch
-      - rule_1.3.1
-
-- name: "SCORED | 1.3.1 | PATCH | Ensure AIDE is installed"
-  command: /usr/sbin/aide --init -B 'database_out=file:/var/lib/aide/aide.db.gz'
-  args:
-      creates: /var/lib/aide/aide.db.gz
-  changed_when: no
-  failed_when: no
-  async: 45
-  poll: 0
-  when:
-      - centos7cis_config_aide|bool
-      - centos7cis_rule_1_3_1|bool
-      - not ansible_check_mode
   tags:
       - level1
       - scored
@@ -594,16 +283,16 @@
 - name: "SCORED | 1.3.2 | PATCH | Ensure filesystem integrity is regularly checked"
   cron:
       name: Run AIDE integrity check
-      cron_file: "{{ centos7cis_aide_cron['cron_file'] }}"
-      user: "{{ centos7cis_aide_cron['cron_user'] }}"
-      minute: "{{ centos7cis_aide_cron['aide_minute'] | default('0') }}"
-      hour: "{{ centos7cis_aide_cron['aide_hour'] | default('5') }}"
-      day: "{{ centos7cis_aide_cron['aide_day'] | default('*') }}"
-      month: "{{ centos7cis_aide_cron['aide_month'] | default('*') }}"
-      weekday: "{{ centos7cis_aide_cron['aide_weekday'] | default('*') }}"
-      job: "{{ centos7cis_aide_cron['aide_job'] }}"
+      cron_file: "{{ rhel7cis_aide_cron['cron_file'] }}"
+      user: "{{ rhel7cis_aide_cron['cron_user'] }}"
+      minute: "{{ rhel7cis_aide_cron['aide_minute'] | default('0') }}"
+      hour: "{{ rhel7cis_aide_cron['aide_hour'] | default('5') }}"
+      day: "{{ rhel7cis_aide_cron['aide_day'] | default('*') }}"
+      month: "{{ rhel7cis_aide_cron['aide_month'] | default('*') }}"
+      weekday: "{{ rhel7cis_aide_cron['aide_weekday'] | default('*') }}"
+      job: "{{ rhel7cis_aide_cron['aide_job'] }}"
   when:
-      - centos7cis_rule_1_3_2|bool
+      - rhel7cis_rule_1_3_2|bool
   tags:
       - level1
       - scored
@@ -616,8 +305,6 @@
   stat:
       path: /etc/grub2.cfg
   register: grub_cfg
-  when:
-      - centos7cis_rule_1_4_1|bool
   tags:
       - level1
       - scored
@@ -631,9 +318,6 @@
       owner: root
       group: root
       mode: 0600
-  when:
-      - centos7cis_rule_1_4_1|bool
-      - grub_cfg.stat.exists and grub_cfg.stat.islnk
   tags:
       - level1
       - scored
@@ -643,11 +327,8 @@
 
 - name: "SCORED | 1.4.2 | PATCH | Ensure bootloader password is set"
   grub_crypt:
-      password: "{{ centos7cis_bootloader_password }}"
+      password: "{{ rhel7cis_bootloader_password }}"
   register: grub_pass
-  when:
-      - centos7cis_set_boot_pass|bool
-      - centos7cis_rule_1_4_2|bool
   tags:
       - level1
       - scored
@@ -660,10 +341,6 @@
       dest: /boot/grub2/user.cfg
       content: "GRUB2_PASSWORD={{ grub_pass.passhash }}"
   notify: generate new grub config
-  when:
-      - centos7cis_set_boot_pass|bool
-      - grub_pass is defined and grub_pass.passhash is defined and grub_pass.passhash
-      - centos7cis_rule_1_4_2|bool
   tags:
       - level1
       - scored
@@ -678,9 +355,6 @@
             dest: /usr/lib/systemd/system/emergency.service
             regexp: '/sbin/sulogin'
             line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
-        when:
-            - centos7cis_rule_1_4_3|bool
-            - ansible_distribution_major_version == 7
         tags:
             - level1
             - level2
@@ -691,9 +365,6 @@
             dest: /usr/lib/systemd/system/rescue.service
             regexp: '/sbin/sulogin'
             line: 'ExecStart=-/bin/sh -c \"/usr/sbin/sulogin; /usr/bin/systemctl --fail --no-block default\"'
-        when:
-            - centos7cis_rule_1_4_3|bool
-            - ansible_distribution_major_version == 7
         tags:
             - level1
             - level2
@@ -707,8 +378,6 @@
       regexp: '^#?\\*.*core'
       line: '*                hard    core            0'
       insertbefore: '^# End of file'
-  when:
-      - centos7cis_rule_1_5_1|bool
   tags:
       - level1
       - scored
@@ -724,8 +393,6 @@
       reload: yes
       sysctl_set: yes
       ignoreerrors: yes
-  when:
-      - centos7cis_rule_1_5_1|bool
   tags:
       - level1
       - scored
@@ -737,7 +404,7 @@
   shell: set -o pipefail && dmesg | grep -E "NX|XD" | grep " active"
   changed_when: no
   when:
-      - centos7cis_rule_1_5_2|bool
+      - rhel7cis_rule_1_5_2|bool
   tags:
       - level1
       - level2
@@ -752,8 +419,6 @@
       reload: yes
       sysctl_set: yes
       ignoreerrors: yes
-  when:
-      - centos7cis_rule_1_5_3|bool
   tags:
       - level1
       - scored
@@ -762,9 +427,6 @@
 
 - name: "SCORED | 1.5.4 | PATCH | Ensure prelink is disabled"
   command: prelink -ua
-  when:
-      - prelink_installed.rc == 0
-      - centos7cis_rule_1_5_4|bool
   tags:
       - level1
       - scored
@@ -775,103 +437,16 @@
   yum:
       name: prelink
       state: absent
-  when:
-      - centos7cis_rule_1_5_4|bool
   tags:
       - level1
       - scored
       - patch
       - rule_1.5.4
-
-- name: "SCORED | 1.6.1.1 | PATCH | Ensure SELinux is not disabled in bootloader configuration"
-  replace:
-      dest: /etc/default/grub
-      regexp: '(selinux|enforcing)\s*=\s*0\s*'
-      follow: yes
-  register: selinux_grub_patch
-  ignore_errors: yes
-  notify: generate new grub config
-  when:
-      - centos7cis_rule_1_6_1_1|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.6.1.1
-
-- name: "SCORED | 1.6.1.2 | PATCH | Ensure the SELinux state is enforcing"
-  selinux:
-      conf: /etc/selinux/config
-      policy: "{{ centos7cis_selinux_pol }}"
-      state: enforcing
-  when:
-      - not centos7cis_selinux_disable|bool
-      - centos7cis_rule_1_6_1_2|bool
-  tags:
-      - level2
-      - scored
-      - selinux
-      - patch
-      - rule_1.6.1.2
-
-- name: "SCORED | 1.6.1.3 | PATCH | Ensure SELinux policy is configured"
-  selinux:
-      conf: /etc/selinux/config
-      policy: "{{ centos7cis_selinux_pol }}"
-      state: enforcing
-  when:
-      - not centos7cis_selinux_disable|bool
-      - centos7cis_rule_1_6_1_3|bool
-  tags:
-      - level2
-      - scored
-      - selinux
-      - patch
-      - rule_1.6.1.3
-
-- name: "SCORED | 1.6.1.4 | PATCH | Ensure SETroubleshoot is not installed"
-  yum:
-      name: setroubleshoot
-      state: absent
-  when:
-      - centos7cis_rule_1_6_1_4|bool
-  tags:
-      - level2
-      - scored
-      - selinux
-      - patch
-      - rule_1.6.1.4
-
-- name: "SCORED | 1.6.1.5 | PATCH | Ensure the MCS Translation Service (mcstrans) is not installed"
-  yum:
-      name: mcstrans
-      state: absent
-  when:
-      - centos7cis_rule_1_6_1_5|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.6.1.5
-
-- name: "SCORED | 1.6.2 | PATCH | Ensure SELinux is installed"
-  yum:
-      name: libselinux
-      state: present
-  when:
-      - centos7cis_rule_1_6_2|bool
-  tags:
-      - level2
-      - scored
-      - patch
-      - rule_1.6.2
-
+      
 - name: "SCORED | 1.7.1.1 | PATCH | Ensure message of the day is configured properly"
   template:
       src: etc/motd.j2
       dest: /etc/motd
-  when:
-      - centos7cis_rule_1_7_1_1|bool
   tags:
       - level1
       - banner
@@ -882,8 +457,6 @@
   template:
       src: etc/issue.j2
       dest: /etc/issue
-  when:
-      - centos7cis_rule_1_7_1_2|bool
   tags:
       - level1
       - patch
@@ -893,8 +466,6 @@
   template:
       src: etc/issue.net.j2
       dest: /etc/issue.net
-  when:
-      - centos7cis_rule_1_7_1_3|bool
   tags:
       - level1
       - banner
@@ -908,8 +479,6 @@
       owner: root
       group: root
       mode: 0644
-  when:
-      - centos7cis_rule_1_7_1_4|bool
   tags:
       - level1
       - perms
@@ -923,8 +492,6 @@
       owner: root
       group: root
       mode: 0644
-  when:
-      - centos7cis_rule_1_7_1_5|bool
   tags:
       - level1
       - perms
@@ -938,8 +505,6 @@
       owner: root
       group: root
       mode: 0644
-  when:
-      - centos7cis_rule_1_7_1_6|bool
   tags:
       - level1
       - perms
@@ -962,10 +527,7 @@
       - { file: '/etc/dconf/profile/gdm', regexp: 'file-db', line: 'file-db:/usr/share/gdm/greeter-dconf-defaults' }
       - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: '\[org\/gnome\/login-screen\]', line: '[org/gnome/login-screen]' }
       - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-enable', line: 'banner-message-enable=true' }
-      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-text', line: "banner-message-text='{{ centos7cis_warning_banner }}' " }
-  when:
-      - centos7cis_gui|bool
-      - centos7cis_rule_1_7_2|bool
+      - { file: '/etc/dconf/db/gdm.d/01-banner-message', regexp: 'banner-message-text', line: "banner-message-text='{{ rhel7cis_warning_banner }}' " }
   tags:
       - level1
       - level2
@@ -976,8 +538,6 @@
   yum:
       name: "*"
       state: latest
-  when:
-      - centos7cis_rule_1_8|bool
   tags:
       - level1
       - level2
