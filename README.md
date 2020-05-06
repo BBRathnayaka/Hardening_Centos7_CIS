@@ -1,5 +1,13 @@
-RHEL 7 CIS STIG
-================
+
+<h2 align="center">RHEL 7 CIS Hardening | ANSIBLE</h2>
+
+<p align="center">
+<a href="#"><img src="https://img.shields.io/badge/BBR-DevOps-blueviolet" alt="Build Status"></a>
+<a href="https://www.idealhax.blogspot.com"><img src="https://img.shields.io/badge/BBR-Blog-blue" alt="Build Status"></a>
+<a href="https://www.linkedin.com/in/bbr/"><img src="https://img.shields.io/badge/BBR-LinkedIn-orange" alt="Build Status"></a>
+<a href="https://twitter.com/RMBRathnayaka"><img src="https://img.shields.io/badge/BBR-Twitter-ff69b4" alt="Build Status"></a>
+<a href="https://www.facebook.com/95bbr"><img src="https://img.shields.io/badge/BBR-FB-success" alt="Build Status"></a>
+</p>
 
 Configure RHEL/Centos 7 machine to be [CIS](https://www.cisecurity.org/cis-benchmarks/) compliant. Level 1 and 2 findings will be corrected by default.
 
